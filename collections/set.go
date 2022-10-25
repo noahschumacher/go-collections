@@ -81,7 +81,7 @@ func smallLarge[T comparable](a, b Set[T]) (Set[T], Set[T]) {
 
 // Turn a Set into a slice of comparable type.
 func (s Set[T]) ToSlice() []T {
-	slice := make([]T, len(s))
+	slice := make([]T, 0, len(s))
 	for key := range s {
 		slice = append(slice, key)
 	}
