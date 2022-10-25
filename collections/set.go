@@ -14,6 +14,13 @@ func (s Set[T]) Add(key T) {
 	s[key] = true
 }
 
+// Remove a key from the set. If the key is not in the noop
+func (s Set[T]) Remove(key T) {
+	if s.Contains(key) {
+		delete(s, key)
+	}
+}
+
 // Check if Set s contains key
 func (s Set[T]) Contains(key T) bool {
 	return s[key]

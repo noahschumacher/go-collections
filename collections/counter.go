@@ -19,10 +19,28 @@ func (c Counter[T]) Inc(k T) {
 	c[k]++
 }
 
+// Increment a value by 1
+func (c Counter[T]) Dec(k T) {
+	c[k]--
+	c.del0(k)
+}
+
+// Delete entries with <= 0 count
+func (c Counter[T]) del0(k T) {
+	if c[k] <= 0 {
+		delete(c, k)
+	}
+}
+
 // Add v to a element. If the element does not exist it will be added with
-// count v
+// count v.
 func (c Counter[T]) Add(k T, v int) {
 	c[k] += v
+}
+
+func (c Counter[T]) Subtract(k T, v int) {
+	c[k] -= v
+	c.del0(k)
 }
 
 // Get the count of an element.
@@ -99,6 +117,19 @@ func (c Counter[T]) Total() int {
 		total += val
 	}
 	return total
+}
+
+func (c Counter[T]) AddCounter(c2 Counter[T]) {
+	for key, val := range c2 {
+		c[key] += val
+	}
+}
+
+func (c Counter[T]) SubtractCounter(c2 Counter[T]) {
+	for key, val := range c2 {
+		c[key] -= val
+		c.del0(key)
+	}
 }
 
 // ---------------------------
