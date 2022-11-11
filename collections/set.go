@@ -14,11 +14,9 @@ func (s Set[T]) Add(key T) {
 	s[key] = true
 }
 
-// Remove a key from the set. If the key is not in the noop
+// Remove a key from the set. If the key is not in the set then noop
 func (s Set[T]) Remove(key T) {
-	if s.Contains(key) {
-		delete(s, key)
-	}
+	delete(s, key)
 }
 
 // Check if Set s contains key
@@ -26,7 +24,7 @@ func (s Set[T]) Contains(key T) bool {
 	return s[key]
 }
 
-// A ∪ B
+// A union B
 func (a Set[T]) Union(b Set[T]) Set[T] {
 	small, large := smallLarge(a, b)
 
@@ -36,7 +34,7 @@ func (a Set[T]) Union(b Set[T]) Set[T] {
 	return large
 }
 
-// A ∩ B
+// A intersect B
 func (a Set[T]) Intersection(b Set[T]) Set[T] {
 	small, large := smallLarge(a, b)
 
@@ -49,7 +47,7 @@ func (a Set[T]) Intersection(b Set[T]) Set[T] {
 	return resultSet
 }
 
-// Ac
+// A compliment
 func (a Set[T]) Complement(b Set[T]) Set[T] {
 	resultSet := NewSet[T](0)
 	for key := range b {
@@ -60,7 +58,7 @@ func (a Set[T]) Complement(b Set[T]) Set[T] {
 	return resultSet
 }
 
-// A - B | NOTE: A-B != B-A
+// A difference B | NOTE: A-B != B-A
 func (a Set[T]) Difference(b Set[T]) Set[T] {
 	resultSet := NewSet[T](0)
 	for key := range a {
@@ -76,17 +74,7 @@ func (a Set[T]) Equals(b Set[T]) bool {
 	return len(a.Difference(b)) == 0 && len(b.Difference(a)) == 0
 }
 
-// returns the small and large according to their len
-func smallLarge[T comparable](a, b Set[T]) (Set[T], Set[T]) {
-	small, large := b, a
-	if len(b) > len(a) {
-		small, large = a, b
-	}
-
-	return small, large
-}
-
-// Turn a Set into a slice of comparable type.
+// Turn a Set into a slice
 func (s Set[T]) ToSlice() []T {
 	slice := make([]T, 0, len(s))
 	for key := range s {
@@ -94,6 +82,16 @@ func (s Set[T]) ToSlice() []T {
 	}
 
 	return slice
+}
+
+// returns the small and large sets according to their len
+func smallLarge[T comparable](a, b Set[T]) (Set[T], Set[T]) {
+	small, large := b, a
+	if len(b) > len(a) {
+		small, large = a, b
+	}
+
+	return small, large
 }
 
 // -------------------------------------------------
