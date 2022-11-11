@@ -32,12 +32,14 @@ func (c Counter[T]) del0(k T) {
 	}
 }
 
-// Add v to a element. If the element does not exist it will be added with
-// count v.
+// Add v counts of a element.
+// If the element does not exist it will be added with count v.
 func (c Counter[T]) Add(k T, v int) {
 	c[k] += v
 }
 
+// Subtract v counts of a element.
+// If the subtraction leaves the element with <= 0 it will be deleted
 func (c Counter[T]) Subtract(k T, v int) {
 	c[k] -= v
 	c.del0(k)
@@ -62,8 +64,9 @@ func (c Counter[T]) Elements() []T {
 	return s
 }
 
-// Returns the n most common elements in order. If elements have the same
-// count they are ordered in the order they are obtained.
+// Returns the most common element. If multiple elements
+// have the same maximum count, only one will returned
+// with no guarentees.
 func (c Counter[T]) MostCommon() T {
 	var mostCommon T
 	var maxValue int
@@ -82,6 +85,9 @@ type item[T comparable] struct {
 	c   int
 }
 
+// Return the N most comment elements ordered by their
+// counts. If elements have the same count their order
+// is not guarenteed. A max of n elements is ever returned.
 func (c Counter[T]) MostCommonN(n int) []T {
 	if n == 0 || len(c) == 0 {
 		return []T{}
@@ -111,6 +117,7 @@ func (c Counter[T]) MostCommonN(n int) []T {
 	return mostCommon
 }
 
+// Get the total count of all elements.
 func (c Counter[T]) Total() int {
 	total := 0
 	for _, val := range c {
@@ -119,12 +126,15 @@ func (c Counter[T]) Total() int {
 	return total
 }
 
+// Add a counter to the current counter.
 func (c Counter[T]) AddCounter(c2 Counter[T]) {
 	for key, val := range c2 {
 		c[key] += val
 	}
 }
 
+// Subtract a counter from the current counter. All <= 0
+// elements will be deleted.
 func (c Counter[T]) SubtractCounter(c2 Counter[T]) {
 	for key, val := range c2 {
 		c[key] -= val

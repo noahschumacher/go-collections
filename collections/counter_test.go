@@ -42,7 +42,6 @@ func TestMostCommont(t *testing.T) {
 
 	c := CounterFromSlice([]int{})
 	assert.Equal(t, 0, c.MostCommon(), "most common should be 0")
-
 }
 
 func TestMostCommontN(t *testing.T) {
@@ -66,5 +65,35 @@ func TestMostCommontN(t *testing.T) {
 
 	c := CounterFromSlice([]int{})
 	assert.Equal(t, []int{}, c.MostCommonN(1))
+}
 
+func TestAddCounter(t *testing.T) {
+	a := CounterFromSlice([]int{0, 1, 2, 2, 3, 3, 3})
+	b := CounterFromSlice([]int{-1, 0, 1, 2, 3, 4})
+	a.AddCounter(b)
+
+	exp := Counter[int]{
+		-1: 1, 0: 2, 1: 2, 2: 3, 3: 4, 4: 1,
+	}
+
+	for key, val := range exp {
+		assert.Equal(t, val, a.Get(key), "key: %v", key)
+		a.Subtract(key, a.Get(key))
+	}
+
+	assert.Equal(t, 0, a.Size())
+}
+
+func TestSubtractCounter(t *testing.T) {
+	a := CounterFromSlice([]int{0, 1, 2, 2, 3, 3, 3, 4})
+	b := CounterFromSlice([]int{-1, 0, 1, 2, 3, 4, 4, 4})
+	b.SubtractCounter(a)
+
+	exp := Counter[int]{-1: 1, 4: 2}
+	for key, val := range exp {
+		assert.Equal(t, val, b.Get(key), "key: %v", key)
+		b.Subtract(key, b.Get(key))
+	}
+
+	assert.Equal(t, 0, b.Size())
 }
