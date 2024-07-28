@@ -9,6 +9,15 @@ func NewSet[T comparable](size int) Set[T] {
 	return make(Set[T], size)
 }
 
+// SetOf creates a new set with specified items.
+func SetOf[T comparable](items ...T) Set[T] {
+	set := NewSet[T](len(items))
+	for _, item := range items {
+		set.Add(item)
+	}
+	return set
+}
+
 // Add a new key to the set
 func (s Set[T]) Add(key T) {
 	s[key] = true
@@ -24,7 +33,7 @@ func (s Set[T]) Contains(key T) bool {
 	return s[key]
 }
 
-// A union B
+// A union B. Modifies the larger set.
 func (a Set[T]) Union(b Set[T]) Set[T] {
 	small, large := smallLarge(a, b)
 
@@ -34,7 +43,7 @@ func (a Set[T]) Union(b Set[T]) Set[T] {
 	return large
 }
 
-// A intersect B
+// A intersect B. Does not modify the sets.
 func (a Set[T]) Intersection(b Set[T]) Set[T] {
 	small, large := smallLarge(a, b)
 
@@ -47,7 +56,7 @@ func (a Set[T]) Intersection(b Set[T]) Set[T] {
 	return resultSet
 }
 
-// A compliment
+// A compliment. Does not modify the sets.
 func (a Set[T]) Complement(b Set[T]) Set[T] {
 	resultSet := NewSet[T](0)
 	for key := range b {
@@ -59,6 +68,7 @@ func (a Set[T]) Complement(b Set[T]) Set[T] {
 }
 
 // A difference B | NOTE: A-B != B-A
+// Does not modify the sets.
 func (a Set[T]) Difference(b Set[T]) Set[T] {
 	resultSet := NewSet[T](0)
 	for key := range a {
@@ -115,21 +125,24 @@ func MapSliceToSet[S any, T comparable](s []S, f func(s S) T) Set[T] {
 	return set
 }
 
-// Union two slices. The provided slices do not need to be unique. Order not guaranteed.
+// Union two slices. The provided slices do not need to be unique. Order not
+// guaranteed.
 func SliceUnion[T comparable](a, b []T) []T {
 	aSet, bSet := SliceToSet(a), SliceToSet(b)
 	union := aSet.Union(bSet)
 	return union.ToSlice()
 }
 
-// Intersection of two slices. The provided slices do not need to be unique. Order not guaranteed.
+// Intersection of two slices. The provided slices do not need to be unique.
+// Order not guaranteed.
 func SliceIntersection[T comparable](a, b []T) []T {
 	aSet, bSet := SliceToSet(a), SliceToSet(b)
 	intersection := aSet.Intersection(bSet)
 	return intersection.ToSlice()
 }
 
-// Complement of A with regards to B. Slices do not need to be unique. Order not guaranteed.
+// Complement of A with regards to B. Slices do not need to be unique. Order not
+// guaranteed.
 func SliceComplement[T comparable](a, b []T) []T {
 	aSet, bSet := SliceToSet(a), SliceToSet(b)
 	complement := aSet.Complement(bSet)
