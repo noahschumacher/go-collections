@@ -1,4 +1,4 @@
-package collections
+package counter
 
 import (
 	"sort"
@@ -9,7 +9,7 @@ import (
 // negative and all non-included elements have a count of 0.
 type Counter[T comparable] map[T]int
 
-func NewCounter[T comparable](size int) Counter[T] {
+func New[T comparable](size int) Counter[T] {
 	return make(Counter[T], size)
 }
 
@@ -140,13 +140,13 @@ func (c Counter[T]) SubtractCounter(c2 Counter[T]) {
 	}
 }
 
-// ---------------------------
+// -----------------------------------------------------------------------------
 // Creation helpers
 
 // Create a counter from a map. The int value in the map is the count. If the
 // int value is <= 0 the element will be ignored from the count.
 func CounterFromMap[T comparable](m map[T]int) Counter[T] {
-	c := NewCounter[T](len(m))
+	c := New[T](len(m))
 	for key, val := range m {
 		if val <= 0 {
 			continue
@@ -159,7 +159,7 @@ func CounterFromMap[T comparable](m map[T]int) Counter[T] {
 // Create a counter from a slice. The count of an element will be the number of
 // times it appears in the slice.
 func CounterFromSlice[T comparable](s []T) Counter[T] {
-	c := NewCounter[T](len(s))
+	c := New[T](len(s))
 	for _, v := range s {
 		c.Inc(v)
 	}

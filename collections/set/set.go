@@ -1,17 +1,17 @@
-package collections
+package set
 
 // A collection of unique comparable items. Uses a map with only true values
 // to accomplish set functionality.
 type Set[T comparable] map[T]bool
 
 // Create a new empty set with the specified initial size.
-func NewSet[T comparable](size int) Set[T] {
+func New[T comparable](size int) Set[T] {
 	return make(Set[T], size)
 }
 
 // SetOf creates a new set with specified items.
 func SetOf[T comparable](items ...T) Set[T] {
-	set := NewSet[T](len(items))
+	set := New[T](len(items))
 	for _, item := range items {
 		set.Add(item)
 	}
@@ -47,7 +47,7 @@ func (a Set[T]) Union(b Set[T]) Set[T] {
 func (a Set[T]) Intersection(b Set[T]) Set[T] {
 	small, large := smallLarge(a, b)
 
-	resultSet := NewSet[T](0)
+	resultSet := New[T](0)
 	for key := range small {
 		if large.Contains(key) {
 			resultSet.Add(key)
@@ -58,7 +58,7 @@ func (a Set[T]) Intersection(b Set[T]) Set[T] {
 
 // A compliment. Does not modify the sets.
 func (a Set[T]) Complement(b Set[T]) Set[T] {
-	resultSet := NewSet[T](0)
+	resultSet := New[T](0)
 	for key := range b {
 		if !a.Contains(key) {
 			resultSet.Add(key)
@@ -70,7 +70,7 @@ func (a Set[T]) Complement(b Set[T]) Set[T] {
 // A difference B | NOTE: A-B != B-A
 // Does not modify the sets.
 func (a Set[T]) Difference(b Set[T]) Set[T] {
-	resultSet := NewSet[T](0)
+	resultSet := New[T](0)
 	for key := range a {
 		if !b.Contains(key) {
 			resultSet.Add(key)
@@ -104,12 +104,12 @@ func smallLarge[T comparable](a, b Set[T]) (Set[T], Set[T]) {
 	return small, large
 }
 
-// -------------------------------------------------
+// -----------------------------------------------------------------------------
 // SLICE HELPERS
 
 // Create a Set from a slice.
 func SliceToSet[T comparable](s []T) Set[T] {
-	set := NewSet[T](len(s))
+	set := New[T](len(s))
 	for _, item := range s {
 		set.Add(item)
 	}
@@ -118,7 +118,7 @@ func SliceToSet[T comparable](s []T) Set[T] {
 
 // Map a slice to a set using a function f
 func MapSliceToSet[S any, T comparable](s []S, f func(s S) T) Set[T] {
-	set := NewSet[T](len(s))
+	set := New[T](len(s))
 	for _, item := range s {
 		set.Add(f(item))
 	}

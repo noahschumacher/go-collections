@@ -1,4 +1,4 @@
-package collections
+package counter
 
 import (
 	"testing"
@@ -29,7 +29,12 @@ func TestCounterFromString(t *testing.T) {
 	assert.Equal(t, 2, c.Get("a"))
 	assert.Equal(t, 1, c.Get(" "))
 	assert.Equal(t, 1, c.Get("S"))
-	assert.ElementsMatch(t, []string{"N", "S", "o", "a", "c", "h", "u", "m", "e", "r", " "}, c.Elements(), "elements mismatch")
+	assert.ElementsMatch(
+		t,
+		[]string{"N", "S", "o", "a", "c", "h", "u", "m", "e", "r", " "},
+		c.Elements(),
+		"elements mismatch",
+	)
 }
 
 func TestMostCommont(t *testing.T) {

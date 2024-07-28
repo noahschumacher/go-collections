@@ -1,11 +1,11 @@
 package slice
 
-import "github.com/noahschumacher/go-collections/collections"
+import "github.com/noahschumacher/go-collections/collections/set"
 
 // Unique returns a new slice with duplicates removed. This function does not
 // modify the input slice. The order of the unique elements is preserved.
 func Unique[T comparable](s []T) []T {
-	seen := collections.NewSet[T](0)
+	seen := set.New[T](0)
 
 	new := make([]T, 0, len(s))
 	for _, v := range s {
