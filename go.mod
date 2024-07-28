@@ -1,6 +1,6 @@
 module github.com/noahschumacher/go-collections
 
-go 1.18
+go 1.22
 
 require github.com/stretchr/testify v1.8.0
 

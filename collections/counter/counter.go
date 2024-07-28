@@ -1,16 +1,15 @@
-package collections
+package counter
 
 import (
 	"sort"
 	"strings"
 )
 
-// A Counter is a map containing an int count of the item.
-// The count cannot be negative and all non-included elements have a count
-// of 0.
+// A Counter is a map containing an int count of the item. The count cannot be
+// negative and all non-included elements have a count of 0.
 type Counter[T comparable] map[T]int
 
-func NewCounter[T comparable](size int) Counter[T] {
+func New[T comparable](size int) Counter[T] {
 	return make(Counter[T], size)
 }
 
@@ -32,14 +31,14 @@ func (c Counter[T]) del0(k T) {
 	}
 }
 
-// Add v counts of a element.
-// If the element does not exist it will be added with count v.
+// Add v counts of a element. If the element does not exist it will be added
+// with count v.
 func (c Counter[T]) Add(k T, v int) {
 	c[k] += v
 }
 
-// Subtract v counts of a element.
-// If the subtraction leaves the element with <= 0 it will be deleted
+// Subtract v counts of a element. If the subtraction leaves the element with <=
+// 0 it will be deleted
 func (c Counter[T]) Subtract(k T, v int) {
 	c[k] -= v
 	c.del0(k)
@@ -64,9 +63,8 @@ func (c Counter[T]) Elements() []T {
 	return s
 }
 
-// Returns the most common element. If multiple elements
-// have the same maximum count, only one will returned
-// with no guarentees.
+// Returns the most common element. If multiple elements have the same maximum
+// count, only one will returned with no guarentees.
 func (c Counter[T]) MostCommon() T {
 	var mostCommon T
 	var maxValue int
@@ -85,9 +83,9 @@ type item[T comparable] struct {
 	c   int
 }
 
-// Return the N most comment elements ordered by their
-// counts. If elements have the same count their order
-// is not guarenteed. A max of n elements is ever returned.
+// Return the N most comment elements ordered by their counts. If elements have
+// the same count their order is not guarenteed. A max of n elements is ever
+// returned.
 func (c Counter[T]) MostCommonN(n int) []T {
 	if n == 0 || len(c) == 0 {
 		return []T{}
@@ -142,13 +140,13 @@ func (c Counter[T]) SubtractCounter(c2 Counter[T]) {
 	}
 }
 
-// ---------------------------
+// -----------------------------------------------------------------------------
 // Creation helpers
 
-// Create a counter from a map. The int value in the map is the count.
-// If the int value is <= 0 the element will be ignored from the count.
+// Create a counter from a map. The int value in the map is the count. If the
+// int value is <= 0 the element will be ignored from the count.
 func CounterFromMap[T comparable](m map[T]int) Counter[T] {
-	c := NewCounter[T](len(m))
+	c := New[T](len(m))
 	for key, val := range m {
 		if val <= 0 {
 			continue
@@ -158,10 +156,10 @@ func CounterFromMap[T comparable](m map[T]int) Counter[T] {
 	return c
 }
 
-// Create a counter from a slice. The count of an element will be the number of times
-// it appears in the slice.
+// Create a counter from a slice. The count of an element will be the number of
+// times it appears in the slice.
 func CounterFromSlice[T comparable](s []T) Counter[T] {
-	c := NewCounter[T](len(s))
+	c := New[T](len(s))
 	for _, v := range s {
 		c.Inc(v)
 	}
