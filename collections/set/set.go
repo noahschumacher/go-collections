@@ -2,7 +2,7 @@ package set
 
 // A collection of unique comparable items. Uses a map with only true values
 // to accomplish set functionality.
-type Set[T comparable] map[T]bool
+type Set[T comparable] map[T]struct{}
 
 // Create a new empty set with the specified initial size.
 func New[T comparable](size int) Set[T] {
@@ -20,7 +20,7 @@ func SetOf[T comparable](items ...T) Set[T] {
 
 // Add a new key to the set
 func (s Set[T]) Add(key T) {
-	s[key] = true
+	s[key] = struct{}{}
 }
 
 // Remove a key from the set. If the key is not in the set then noop
@@ -30,7 +30,8 @@ func (s Set[T]) Remove(key T) {
 
 // Check if Set s contains key
 func (s Set[T]) Contains(key T) bool {
-	return s[key]
+	_, ok := s[key]
+	return ok
 }
 
 // A union B. Modifies the larger set.
